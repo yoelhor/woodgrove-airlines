@@ -33,6 +33,18 @@ nav {
   rotate: 30deg;
 }
 
+#SeachFlights{
+  min-height: 57px;
+}
+
+@media (max-width: 1200px) {
+  #SeachFlights{
+    padding: 0;
+  }
+}
+
+
+
 
 /****** Cards ************/
 .wg-card-image {
@@ -54,6 +66,7 @@ nav {
 .wg-card {
   border-style: none;
   height: 500px;
+  margin-bottom: 50px;
 }
 
 .wg-card-content{
