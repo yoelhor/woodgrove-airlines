@@ -11,6 +11,7 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { HomeJumbotronComponent } from './home-jumbotron/home-jumbotron.component';
+import { NavMenuLoginComponent } from './nav-menu-login/nav-menu-login.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { HomeJumbotronComponent } from './home-jumbotron/home-jumbotron.componen
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    HomeJumbotronComponent
+    HomeJumbotronComponent,
+    NavMenuLoginComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
