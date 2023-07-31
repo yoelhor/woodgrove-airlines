@@ -15,10 +15,9 @@ export class NavMenuLoginComponent {
   baseUrl = "";
 
   Login() {
-    console.log(this.baseUrl)
-    // this.http.get('https://api.example.com/endpoint')
-    //   .subscribe(data => {
-    //     // handle the data
-    //   });
+    console.log(this.baseUrl);
+    this.http.get(this.baseUrl + 'weatherforecast').subscribe(result => {
+      console.log(result);
+    }, error => console.error(error));
   }
 }
