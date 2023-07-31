@@ -25,3 +25,6 @@ nav{
   color: white!important;
 }
 
+.bi-airplane::before {
+  rotate: 30deg;
+}
