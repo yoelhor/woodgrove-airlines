@@ -5,7 +5,11 @@ a {
   color: #0366d6;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
@@ -20,11 +24,42 @@ code {
 }
 
 /***** Header navigation bar ****/
-nav{
-  background-color: #003049!important;
-  color: white!important;
+nav {
+  background-color: #003049 !important;
+  color: white !important;
 }
 
 .bi-airplane::before {
   rotate: 30deg;
+}
+
+
+/****** Cards ************/
+.wg-card-image {
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 220px;
+  border-bottom-color: red;
+  border-bottom-width: 10px;
+  border-bottom-style: solid;
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+}
+
+.wg-card-body {
+  padding: 0;
+  background-color: #f9f9f9;
+}
+
+.wg-card {
+  border-style: none;
+  height: 500px;
+}
+
+.wg-card-content{
+  padding: 15px;
+}
+
+.wg-card-title{
+  padding-top: 15px;
 }
