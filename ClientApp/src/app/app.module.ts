@@ -14,7 +14,7 @@ import { HomeJumbotronComponent } from './home-jumbotron/home-jumbotron.componen
 import { NavMenuLoginComponent } from './nav-menu-login/nav-menu-login.component';
 
 @NgModule({
-  declarations: [
+  declarations: [ 
     AppComponent,
     NavMenuComponent,
     HomeComponent,
