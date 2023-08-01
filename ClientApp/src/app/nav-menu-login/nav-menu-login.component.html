@@ -24,14 +24,14 @@
 
     <form>
       <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        <label for="signInEmail" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="signInEmail" aria-describedby="emailHelp" #signInEmail value="1@dev.com">
       </div>
       <div class="mb-3">
         <label for="exampleInputPassword1" class="form-label">Password</label>
         <input type="password" class="form-control" id="exampleInputPassword1">
       </div>
-      <button type="button" class="btn btn-primary" (click)="Login()">Sign in</button>
+      <button type="button" class="btn btn-primary" (click)="LoginInitiate()">Sign in</button>
     </form>
   </div>
 </ng-template>
