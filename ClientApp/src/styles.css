@@ -77,3 +77,8 @@ nav {
 .wg-card-title{
   padding-top: 15px;
 }
+
+/****** Login overlay **********/
+.cdk-overlay-dark-backdrop {
+  background: rgba(0,0,0,.32)!important;
+}

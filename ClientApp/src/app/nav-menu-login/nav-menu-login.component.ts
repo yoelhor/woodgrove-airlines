@@ -18,6 +18,7 @@ export class NavMenuLoginComponent {
     console.log(this.baseUrl);
     this.http.get(this.baseUrl + 'weatherforecast').subscribe(result => {
       console.log(result);
+      this.isOpen = false;
     }, error => console.error(error));
   }
 }
