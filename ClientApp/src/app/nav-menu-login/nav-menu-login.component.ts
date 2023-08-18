@@ -13,7 +13,7 @@ export class NavMenuLoginComponent {
   @ViewChild('signInPassword') signInPassword!: ElementRef;
   
   isOpen = false;
-  baseUrl = "/Proxy/";
+  baseUrl = "/";
   appID = "f28eb79b-f279-45ca-87b1-6a8421f54bc1"
 
   PasswordLogin_1_Initiate() {
@@ -23,7 +23,7 @@ export class NavMenuLoginComponent {
     formData.append('challenge_type', 'password redirect');
     formData.append('username', this.signInEmail.nativeElement.value);
 
-    this.http.post<any>(this.baseUrl + 'initiate', formData).subscribe(result => {
+    this.http.post<any>(this.baseUrl + 'Proxy/initiate', formData).subscribe(result => {
 
       console.log("Result from PasswordLogin_1_Initiate:");
       console.log(result);
@@ -41,7 +41,7 @@ export class NavMenuLoginComponent {
     formData.append('challenge_type', 'password redirect');
     formData.append('credential_token', credential_token);
 
-    this.http.post<any>(this.baseUrl + 'challenge', formData).subscribe(result => {
+    this.http.post<any>(this.baseUrl + 'Proxy/challenge', formData).subscribe(result => {
       console.log("Result from PasswordLogin_2_Challenge:");
       this.PasswordLogin_3_Token(result.credential_token);
     }, error => console.error(error));
@@ -56,8 +56,28 @@ export class NavMenuLoginComponent {
     formData.append('credential_token', credential_token);
     formData.append('scope', "openid offline_access");
 
-    this.http.post<any>(this.baseUrl + 'token', formData).subscribe(result => {
+    this.http.post<any>(this.baseUrl + 'Proxy/token', formData).subscribe(result => {
       console.log("Result from PasswordLogin_3_Token:");
+      console.log(result);
+
+      // Can be replaced with sessionStorage
+      localStorage.setItem("accessToken", result.access_token);
+      this.isOpen = false;
+      this.RetrieveDisplayName();
+    }, error => console.error(error));
+  }
+
+  RetrieveDisplayName () {
+
+    var headers = new HttpHeaders({ 
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    });
+ 
+   const requestOptions = { headers: headers };
+
+    this.http.get<any>(this.baseUrl + 'profile?accesstoken=' + localStorage.getItem('accessToken') /*, { headers: headers }**/).subscribe(result => {
+      console.log("Result from RetrieveDisplayName:");
       console.log(result);
       this.isOpen = false;
     }, error => console.error(error));

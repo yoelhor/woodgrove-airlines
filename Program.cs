@@ -1,8 +1,21 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+
+// Add authentication scheme
+// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//     .AddMicrosoftIdentityWebApi(builder.Configuration);
+
+// builder.Services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme,
+//                                                  options => 
+//                                                  {  
+//                                                      options.TokenValidationParameters.ValidateIssuerSigningKey = false;
+//                                                  }); 
 
 var app = builder.Build();
 
@@ -16,7 +29,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-
+//app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
