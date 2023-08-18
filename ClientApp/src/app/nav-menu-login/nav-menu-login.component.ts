@@ -7,11 +7,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   styleUrls: ['./nav-menu-login.component.css']
 })
 export class NavMenuLoginComponent {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   @ViewChild('signInEmail') signInEmail!: ElementRef;
   @ViewChild('signInPassword') signInPassword!: ElementRef;
-  
+
   isOpen = false;
   baseUrl = "/";
   displayName = "";
@@ -71,32 +71,32 @@ export class NavMenuLoginComponent {
         this.isOpen = false;
         this.RetrieveDisplayName();
       }
-      else
-      {
-        if (result.error_description.includes("AADSTS50126") || result.error_description.includes("AADSTS9002313"))
-        {
+      else {
+        if (result.error_description.includes("AADSTS50126") || result.error_description.includes("AADSTS9002313")) {
           this.errorMessage = "We couldn't find an account with this email address or password.";
         }
-        else
-        {
+        else {
           this.errorMessage = result.error_description;
         }
-        
+
       }
 
     }, error => console.error(error));
   }
 
-  RetrieveDisplayName () {
+  RetrieveDisplayName() {
 
-    var headers = new HttpHeaders({ 
+    var headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
     });
- 
-   const requestOptions = { headers: headers };
 
-    this.http.get<any>(this.baseUrl + 'profile?accesstoken=' + localStorage.getItem('accessToken') /*, { headers: headers }**/).subscribe(result => {
+    const requestOptions = { headers: headers };
+
+    const formData = new FormData();
+    formData.append('accessToken', `${localStorage.getItem('accessToken')}`);
+
+    this.http.post<any>(this.baseUrl +  "profile", formData /*, { headers: headers }**/).subscribe(result => {
       console.log("Result from RetrieveDisplayName:");
       console.log(result);
       this.displayName = result.name;

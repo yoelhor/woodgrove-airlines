@@ -21,8 +21,8 @@ public class ProfileController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet]
-    public IActionResult Get(string accessToken)
+    [HttpPost]
+    public IActionResult Post()
     {
         Response.Headers.Add("Access-Control-Allow-Origin", "*");
 
@@ -45,14 +45,25 @@ public class ProfileController : ControllerBase
         //     }
         // }
 
-        var handler = new JwtSecurityTokenHandler();
-        var token = handler.ReadJwtToken(accessToken);
-
-        IDictionary<string, string> claims = new Dictionary<string, string>();
-        foreach (var claim in token.Claims)
+        try
         {
-            claims.Add(claim.Type, claim.Value);
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(Request.Form["accessToken"]);
+
+            IDictionary<string, string> claims = new Dictionary<string, string>();
+            foreach (var claim in token.Claims)
+            {
+                claims.Add(claim.Type, claim.Value);
+            }
+
+            return Ok(claims);
         }
-        return Ok(claims);
+        catch (System.Exception)
+        {
+            return Ok("Can't read the access token");
+        }
+
+
+        
     }
 }
