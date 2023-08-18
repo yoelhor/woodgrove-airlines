@@ -22,28 +22,28 @@ public class ProfileController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult Get()
+    public IActionResult Get(string accessToken)
     {
         Response.Headers.Add("Access-Control-Allow-Origin", "*");
 
-        var accessTokenHeader = Request.Headers[HeaderNames.Authorization];
-        var accessToken = string.Empty;
+        // var accessTokenHeader = Request.Headers[HeaderNames.Authorization];
+        // var accessToken = string.Empty;
 
-        if (accessTokenHeader.Count == 1)
-        {
-            accessToken = accessTokenHeader[0].Replace("Bearer ", "");
-        }
-        else
-        {
-            if (!string.IsNullOrEmpty(Request.Query["accesstoken"]))
-            {
-                accessToken = Request.Query["accesstoken"];
-            }
-            else
-            {
-                return Unauthorized("Bearer token not found.");
-            }
-        }
+        // if (accessTokenHeader.Count == 1)
+        // {
+        //     accessToken = accessTokenHeader[0].Replace("Bearer ", "");
+        // }
+        // else
+        // {
+        //     if (!string.IsNullOrEmpty(Request.Query["accesstoken"]))
+        //     {
+        //         accessToken = Request.Query["accesstoken"];
+        //     }
+        //     else
+        //     {
+        //         return Unauthorized("Bearer token not found.");
+        //     }
+        // }
 
         var handler = new JwtSecurityTokenHandler();
         var token = handler.ReadJwtToken(accessToken);
