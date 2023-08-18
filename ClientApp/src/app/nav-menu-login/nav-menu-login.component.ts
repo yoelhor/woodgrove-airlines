@@ -14,10 +14,14 @@ export class NavMenuLoginComponent {
   
   isOpen = false;
   baseUrl = "/";
-  appID = "f28eb79b-f279-45ca-87b1-6a8421f54bc1"
+  displayName = "";
+  errorMessage = "";
+  showLoginButton = true;
+  appID = "f28eb79b-f279-45ca-87b1-6a8421f54bc1";
 
   PasswordLogin_1_Initiate() {
 
+    this.errorMessage = "";
     const formData = new FormData();
     formData.append('client_id', this.appID);
     formData.append('challenge_type', 'password redirect');
@@ -61,9 +65,25 @@ export class NavMenuLoginComponent {
       console.log(result);
 
       // Can be replaced with sessionStorage
-      localStorage.setItem("accessToken", result.access_token);
-      this.isOpen = false;
-      this.RetrieveDisplayName();
+      if (!result.error) {
+        // Can be replaced with sessionStorage
+        localStorage.setItem("accessToken", result.access_token);
+        this.isOpen = false;
+        this.RetrieveDisplayName();
+      }
+      else
+      {
+        if (result.error_description.includes("AADSTS50126") || result.error_description.includes("AADSTS9002313"))
+        {
+          this.errorMessage = "We couldn't find an account with this email address or password.";
+        }
+        else
+        {
+          this.errorMessage = result.error_description;
+        }
+        
+      }
+
     }, error => console.error(error));
   }
 
@@ -79,7 +99,8 @@ export class NavMenuLoginComponent {
     this.http.get<any>(this.baseUrl + 'profile?accesstoken=' + localStorage.getItem('accessToken') /*, { headers: headers }**/).subscribe(result => {
       console.log("Result from RetrieveDisplayName:");
       console.log(result);
-      this.isOpen = false;
+      this.displayName = result.name;
+      this.showLoginButton = false;
     }, error => console.error(error));
   }
 }

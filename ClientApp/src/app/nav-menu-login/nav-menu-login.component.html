@@ -1,8 +1,10 @@
 <button class="btn btn-link" style="color: white; text-decoration: none;" (click)="isOpen = !isOpen" cdkOverlayOrigin
-  #trigger="cdkOverlayOrigin">
+  #trigger="cdkOverlayOrigin" [style.visibility]="showLoginButton ? 'visible' : 'hidden'">
   <!-- The condition on the next line should be changed to user identity -->
   {{isOpen ? "Login" : "Login"}}
 </button>
+
+<span [style.visibility]=" !showLoginButton ? 'visible' : 'hidden'">Welcome to {{displayName}}</span>
 
 <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="isOpen"
   [cdkConnectedOverlayOffsetX]="-100" [cdkConnectedOverlayHasBackdrop]="true" (backdropClick)="isOpen = false">
@@ -31,7 +33,9 @@
         <label for="signInPassword" class="form-label">Password</label>
         <input type="password" class="form-control" id="signInPassword" #signInPassword value="">
       </div>
+      <span style="color: red; display: block; padding-bottom: 10px;">{{errorMessage}}</span>
       <button type="button" class="btn btn-primary" (click)="PasswordLogin_1_Initiate()">Sign in</button>
+      
     </form>
   </div>
 </ng-template>
