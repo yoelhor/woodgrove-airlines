@@ -26,7 +26,7 @@ public class ProxyController : ControllerBase
     {
         var response = await client.PostAsync($"{baseUrl}/initiate{baseUrlParams}", CreatePostData());
         var responseString = await response.Content.ReadAsStringAsync();
-
+        Response.Headers.Add("Access-Control-Allow-Origin", "*");
         return Ok(JsonSerializer.Deserialize<dynamic>(responseString));
     }
 
@@ -35,7 +35,7 @@ public class ProxyController : ControllerBase
     {
         var response = await client.PostAsync($"{baseUrl}/challenge{baseUrlParams}", CreatePostData());
         var responseString = await response.Content.ReadAsStringAsync();
-
+        Response.Headers.Add("Access-Control-Allow-Origin", "*");
         return Ok(JsonSerializer.Deserialize<dynamic>(responseString));
     }
 
@@ -44,7 +44,7 @@ public class ProxyController : ControllerBase
     {
         var response = await client.PostAsync($"{baseUrl}/token{baseUrlParams}", CreatePostData());
         var responseString = await response.Content.ReadAsStringAsync();
-
+        Response.Headers.Add("Access-Control-Allow-Origin", "*");
         return Ok(JsonSerializer.Deserialize<dynamic>(responseString));
     }
 

@@ -25,13 +25,13 @@
     <form>
       <div class="mb-3">
         <label for="signInEmail" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="signInEmail" aria-describedby="emailHelp" #signInEmail value="1@dev.com">
+        <input type="email" class="form-control" id="signInEmail" #signInEmail value="">
       </div>
       <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1">
+        <label for="signInPassword" class="form-label">Password</label>
+        <input type="password" class="form-control" id="signInPassword" #signInPassword value="">
       </div>
-      <button type="button" class="btn btn-primary" (click)="LoginInitiate()">Sign in</button>
+      <button type="button" class="btn btn-primary" (click)="PasswordLogin_1_Initiate()">Sign in</button>
     </form>
   </div>
 </ng-template>
