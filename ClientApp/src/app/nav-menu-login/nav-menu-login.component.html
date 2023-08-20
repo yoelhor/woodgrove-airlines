@@ -4,6 +4,7 @@
   {{isOpen ? "Login" : "Login"}}
 </button>
 
+
 <span [style.visibility]=" !showLoginButton ? 'visible' : 'hidden'">Welcome to {{displayName}}</span>
 
 <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="isOpen"
@@ -16,26 +17,9 @@
      min-height: 300px;
      padding: 20px;">
 
-    <div style="display: flex;
-              align-items: center;
-              justify-content: space-between;
-              padding-bottom: 15px;">
-      <h4>Login</h4>
-      <button type="button" class="btn-close btn-close-black" aria-label="Close" (click)="isOpen = !isOpen"></button>
-    </div>
-
-    <form>
-      <div class="mb-3">
-        <label for="signInEmail" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="signInEmail" #signInEmail value="">
-      </div>
-      <div class="mb-3">
-        <label for="signInPassword" class="form-label">Password</label>
-        <input type="password" class="form-control" id="signInPassword" #signInPassword value="">
-      </div>
-      <span style="color: red; display: block; padding-bottom: 10px;">{{errorMessage}}</span>
-      <button type="button" class="btn btn-primary" (click)="PasswordLogin_1_Initiate()">Sign in</button>
-      
-    </form>
+     <app-sign-in-with-pwd 
+      (displayNameEvent)="updateDisplayName($event)"
+      (OverlayVisibilityEvent)="updateOverlayVisibility($event)"
+      (LoginButtonVisibilityEvent)="updateLoginButtonVisibility($event)"></app-sign-in-with-pwd>
   </div>
 </ng-template>

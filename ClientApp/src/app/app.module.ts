@@ -15,6 +15,10 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { HomeJumbotronComponent } from './home-jumbotron/home-jumbotron.component';
 import { NavMenuLoginComponent } from './nav-menu-login/nav-menu-login.component';
+import { SignInWithPwdComponent } from './identity/sign-in-with-pwd/sign-in-with-pwd.component';
+import { SignInWithOtpComponent } from './identity/sign-in-with-otp/sign-in-with-otp.component';
+import { SignUpComponent } from './identity/sign-up/sign-up.component';
+import { SsprComponent } from './identity/sspr/sspr.component';
 
 @NgModule({
   declarations: [ 
@@ -24,7 +28,11 @@ import { NavMenuLoginComponent } from './nav-menu-login/nav-menu-login.component
     CounterComponent,
     FetchDataComponent,
     HomeJumbotronComponent,
-    NavMenuLoginComponent
+    NavMenuLoginComponent,
+    SignInWithPwdComponent,
+    SignInWithOtpComponent,
+    SignUpComponent,
+    SsprComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
