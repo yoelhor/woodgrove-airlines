@@ -1,12 +1,13 @@
-<button class="btn btn-link" style="color: white; text-decoration: none;" (click)="isOpen = !isOpen" cdkOverlayOrigin
-  #trigger="cdkOverlayOrigin" [style.visibility]="showLoginButton ? 'visible' : 'hidden'">
+<button class="btn btn-link" style="color: white; text-decoration: none;"
+  (click)="isOpen = !isOpen; userFlow = 'signin'" cdkOverlayOrigin #trigger="cdkOverlayOrigin"
+  [style.display]="showLoginButton ? '' : 'none'">
   <!-- The condition on the next line should be changed to user identity -->
   {{isOpen ? "Login" : "Login"}}
 </button>
 
+<div *ngIf="showLoginButton == false" class="wg-user-display-name">Welcome to {{displayName}}</div>
 
-<span [style.visibility]=" !showLoginButton ? 'visible' : 'hidden'">Welcome to {{displayName}}</span>
-
+<!-- The overlay object --->
 <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="isOpen"
   [cdkConnectedOverlayOffsetX]="-100" [cdkConnectedOverlayHasBackdrop]="true" (backdropClick)="isOpen = false">
   <div class="example-overlay" style="background-color: white;
@@ -17,9 +18,63 @@
      min-height: 300px;
      padding: 20px;">
 
-     <app-sign-in-with-pwd 
-      (displayNameEvent)="updateDisplayName($event)"
-      (OverlayVisibilityEvent)="updateOverlayVisibility($event)"
-      (LoginButtonVisibilityEvent)="updateLoginButtonVisibility($event)"></app-sign-in-with-pwd>
+    <!---Overlay title and close button-->
+    <div style="display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 15px;">
+
+      <h4 *ngIf="userFlow == 'signin'">Login</h4>
+      <h4 *ngIf="userFlow == 'sspr'">Password reset</h4>
+      <h4 *ngIf="userFlow == 'signup'">Sign-up</h4>
+
+      <button type="button" class="btn-close btn-close-black" aria-label="Close"
+        (click)="this.isOpen = false;"></button>
+    </div>
+
+    <!--Sign-in with both email and password and OTP-->
+    <div style="background-color: white; margin-top: -10px;" *ngIf="userFlow == 'signin'">
+      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <i class="bi bi-shield-lock"></i>&nbsp; Email & password
+          </ng-template>
+
+          <div style="margin-top: 15px;"></div>
+          <app-sign-in-with-pwd (displayNameEvent)="updateDisplayName($event)"
+            (OverlayVisibilityEvent)="updateOverlayVisibility($event)"
+            (LoginButtonVisibilityEvent)="updateLoginButtonVisibility($event)"
+            (UserFlowEvent)="updateUserFlow($event)"></app-sign-in-with-pwd>
+        </mat-tab>
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <i class="bi bi-send"></i>&nbsp; Email & passcode
+          </ng-template>
+
+          <div style="margin-top: 15px;"></div>
+          <app-sign-in-with-otp (displayNameEvent)="updateDisplayName($event)"
+            (OverlayVisibilityEvent)="updateOverlayVisibility($event)"
+            (LoginButtonVisibilityEvent)="updateLoginButtonVisibility($event)"
+            (UserFlowEvent)="updateUserFlow($event)"></app-sign-in-with-otp>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+
+    <!--Self-service password reset-->
+    <div style="background-color: white; margin-top: -10px;" *ngIf="userFlow == 'sspr'">
+      <app-sspr (displayNameEvent)="updateDisplayName($event)"
+        (OverlayVisibilityEvent)="updateOverlayVisibility($event)"
+        (LoginButtonVisibilityEvent)="updateLoginButtonVisibility($event)"
+        (UserFlowEvent)="updateUserFlow($event)"></app-sspr>
+    </div>
+
+    <!--Sign-up flow-->
+    <div style="background-color: white; margin-top: -10px;" *ngIf="userFlow == 'signup'">
+      <app-sign-up (displayNameEvent)="updateDisplayName($event)"
+        (OverlayVisibilityEvent)="updateOverlayVisibility($event)"
+        (LoginButtonVisibilityEvent)="updateLoginButtonVisibility($event)"
+        (UserFlowEvent)="updateUserFlow($event)"></app-sign-up>
+    </div>
   </div>
 </ng-template>

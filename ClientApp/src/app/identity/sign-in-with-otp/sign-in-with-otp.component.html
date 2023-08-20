@@ -1,1 +1,10 @@
-<p>sign-in-with-otp works!</p>
+<form>
+    <p style="color: red;">This flow is under development!!!</p>
+    <div class="mb-3">
+        <label for="signInEmail" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="signInEmail" #signInEmail value="">
+        <a class="wg-identity-link" href="#" (click)="GoToSignUp();"> Don't have an account?</a>
+    </div>
+    <span style="color: red; display: block; padding-bottom: 10px;">{{errorMessage}}</span>
+    <button type="button" class="btn btn-primary" (click)="OtpLogin_1_Initiate()">Sign in</button>
+</form>

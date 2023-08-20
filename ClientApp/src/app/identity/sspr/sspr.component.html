@@ -1,1 +1,9 @@
-<p>sspr works!</p>
+<form>
+    <div class="mb-3">
+        <label for="signInEmail" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="signInEmail" #signInEmail value="">
+        <a href="#"  class="wg-identity-link" (click)="GoToSignIn();"> Remember your password?</a>
+    </div>
+    <span style="color: red; display: block; padding-bottom: 10px;">{{errorMessage}}</span>
+    <button type="submit" class="btn btn-primary" (click)="SSPR_1_Initiate();">Next</button>
+</form>

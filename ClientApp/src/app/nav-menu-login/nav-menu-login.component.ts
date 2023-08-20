@@ -13,6 +13,7 @@ export class NavMenuLoginComponent {
   isOpen = false;
   displayName = "";
   showLoginButton = true;
+  userFlow = "signin";
 
   updateDisplayName(displayName: string) {
     this.displayName = displayName;
@@ -24,5 +25,9 @@ export class NavMenuLoginComponent {
 
   updateLoginButtonVisibility(showLoginButton: boolean) {
     this.showLoginButton = showLoginButton;
+  }
+
+  updateUserFlow(userFlow: string) {
+    this.userFlow = userFlow;
   }
 }

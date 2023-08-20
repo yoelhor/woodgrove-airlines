@@ -1,20 +1,14 @@
-<div style="display: flex;
-              align-items: center;
-              justify-content: space-between;
-              padding-bottom: 15px;">
-    <h4>Login (username and password)</h4>
-    <button type="button" class="btn-close btn-close-black" aria-label="Close" (click)="this.closeOverlay()"></button>
-</div>
-
 <form>
     <div class="mb-3">
         <label for="signInEmail" class="form-label">Email address</label>
         <input type="email" class="form-control" id="signInEmail" #signInEmail value="">
+        <a href="#" class="wg-identity-link" (click)="GoToSignUp();"> Don't have an account?</a>
     </div>
     <div class="mb-3">
-        <label for="signInPassword" class="form-label">Password</label>
+        <label for="signInPassword" class="form-label">Password</label> 
         <input type="password" class="form-control" id="signInPassword" #signInPassword value="">
+        <a href="#" class="wg-identity-link" (click)="GoToSSPR();"> Forgot password?</a>
     </div>
     <span style="color: red; display: block; padding-bottom: 10px;">{{errorMessage}}</span>
-    <button type="button" class="btn btn-primary" (click)="PasswordLogin_1_Initiate()">Sign in</button>
+    <button type="submit" class="btn btn-primary" (click)="PasswordLogin_1_Initiate();">Sign in</button>
 </form>

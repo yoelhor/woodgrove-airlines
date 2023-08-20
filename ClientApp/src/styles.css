@@ -34,12 +34,12 @@ nav {
   rotate: 30deg;
 }
 
-#SeachFlights{
+#SeachFlights {
   min-height: 57px;
 }
 
 @media (max-width: 1200px) {
-  #SeachFlights{
+  #SeachFlights {
     padding: 0;
   }
 }
@@ -70,15 +70,42 @@ nav {
   margin-bottom: 50px;
 }
 
-.wg-card-content{
+.wg-card-content {
   padding: 15px;
 }
 
-.wg-card-title{
+.wg-card-title {
   padding-top: 15px;
 }
 
 /****** Login overlay **********/
 .cdk-overlay-dark-backdrop {
-  background: rgba(0,0,0,.32)!important;
+  background: rgba(0, 0, 0, .32) !important;
+}
+
+.mat-mdc-tab-header-pagination {
+  display: none !important;
+}
+
+.mdc-tab-indicator--active {
+  border-bottom-color: var(--bs-orange) !important;
+  border-bottom-style: solid !important;
+  border-bottom-width: 5px !important;
+}
+
+.mdc-tab-indicator{
+  visibility: hidden!important;
+}
+
+.wg-identity-link{
+  color: gray;
+  font-size: smaller;
+  text-decoration: none;
+}
+
+.wg-user-display-name{
+  border-bottom-color: var(--bs-orange) !important;
+  border-bottom-style: solid !important;
+  border-bottom-width: 3px !important;
+  padding-top: 9px;
 }

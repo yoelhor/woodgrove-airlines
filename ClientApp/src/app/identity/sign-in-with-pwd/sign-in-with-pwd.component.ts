@@ -1,5 +1,6 @@
-import { Component, ElementRef, Inject, ViewChild, EventEmitter, Output  } from '@angular/core';
+import { Component, ElementRef, Inject, ViewChild, EventEmitter, Output, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-sign-in-with-pwd',
@@ -7,30 +8,41 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   styleUrls: ['./sign-in-with-pwd.component.css']
 })
 export class SignInWithPwdComponent {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+
+  }
 
   // Sharing data between child and parent components events
   @Output() displayNameEvent = new EventEmitter<string>();
   @Output() OverlayVisibilityEvent = new EventEmitter<boolean>();
   @Output() LoginButtonVisibilityEvent = new EventEmitter<boolean>();
+  @Output() UserFlowEvent = new EventEmitter<string>();
 
   @ViewChild('signInEmail') signInEmail!: ElementRef;
   @ViewChild('signInPassword') signInPassword!: ElementRef;
 
-  baseUrl = "https://localhost:7291/";
-  displayName = "";
   errorMessage = "";
-  appID = "f28eb79b-f279-45ca-87b1-6a8421f54bc1";
+  
 
+  GoToSSPR()
+  {
+    this.UserFlowEvent.emit("sspr");
+  }
+
+  GoToSignUp()
+  {
+    this.UserFlowEvent.emit("signup");
+  }
+  
   PasswordLogin_1_Initiate() {
 
     this.errorMessage = "";
     const formData = new FormData();
-    formData.append('client_id', this.appID);
+    formData.append('client_id', environment.appID);
     formData.append('challenge_type', 'password redirect');
     formData.append('username', this.signInEmail.nativeElement.value);
 
-    this.http.post<any>(this.baseUrl + 'Proxy/initiate', formData).subscribe(result => {
+    this.http.post<any>(environment.baseUrl + 'Proxy/initiate', formData).subscribe(result => {
 
       console.log("Result from PasswordLogin_1_Initiate:");
       console.log(result);
@@ -44,11 +56,11 @@ export class SignInWithPwdComponent {
   PasswordLogin_2_Challenge(credential_token: string) {
 
     const formData = new FormData();
-    formData.append('client_id', this.appID);
+    formData.append('client_id', environment.appID);
     formData.append('challenge_type', 'password redirect');
     formData.append('credential_token', credential_token);
 
-    this.http.post<any>(this.baseUrl + 'Proxy/challenge', formData).subscribe(result => {
+    this.http.post<any>(environment.baseUrl + 'Proxy/challenge', formData).subscribe(result => {
       console.log("Result from PasswordLogin_2_Challenge:");
       this.PasswordLogin_3_Token(result.credential_token);
     }, error => console.error(error));
@@ -57,13 +69,13 @@ export class SignInWithPwdComponent {
   PasswordLogin_3_Token(credential_token: string) {
 
     const formData = new FormData();
-    formData.append('client_id', this.appID);
+    formData.append('client_id', environment.appID);
     formData.append('grant_type', 'password');
     formData.append('password', this.signInPassword.nativeElement.value);
     formData.append('credential_token', credential_token);
     formData.append('scope', "openid offline_access");
 
-    this.http.post<any>(this.baseUrl + 'Proxy/token', formData).subscribe(result => {
+    this.http.post<any>(environment.baseUrl + 'Proxy/token', formData).subscribe(result => {
       console.log("Result from PasswordLogin_3_Token:");
       console.log(result);
 
@@ -98,15 +110,15 @@ export class SignInWithPwdComponent {
     const formData = new FormData();
     formData.append('accessToken', `${localStorage.getItem('accessToken')}`);
 
-    this.http.post<any>(this.baseUrl +  "profile", formData /*, { headers: headers }**/).subscribe(result => {
+    this.http.post<any>(environment.baseUrl + "profile", formData /*, { headers: headers }**/).subscribe(result => {
       console.log("Result from RetrieveDisplayName:");
       console.log(result);
-      this.displayName = result.name;
 
       // Update the parent component
       this.displayNameEvent.emit(result.name);
       this.OverlayVisibilityEvent.emit(false);
       this.LoginButtonVisibilityEvent.emit(false);
+
 
     }, error => console.error(error));
   }
