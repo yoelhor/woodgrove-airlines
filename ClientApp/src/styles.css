@@ -45,75 +45,92 @@ nav {
 }
 
 
-
-
-/****** Cards ************/
-.wg-card-image {
-  background-repeat: no-repeat;
+/******** home page jumbotron***********/
+.wg-jumbotron {
+  background-image: url(/assets/home/background_3.jpg);
   width: 100%;
-  height: 220px;
-  border-bottom-color: red;
-  border-bottom-width: 10px;
-  border-bottom-style: solid;
-  border-top-right-radius: 15px;
-  border-top-left-radius: 15px;
-}
+  height: 300px;
+  position: relative;
+  top: -1px;
+  animation: scroll 800s linear infinite;
 
-.wg-card-body {
-  padding: 0;
-  background-color: #f9f9f9;
-}
+ 
+  }
 
-.wg-card {
-  border-style: none;
-  height: 500px;
-  margin-bottom: 50px;
-}
+  @keyframes scroll {
+    100% {
+      background-position: right 0px bottom -400%;
+    }
+  }
 
-.wg-card-content {
-  padding: 15px;
-}
 
-.wg-card-title {
-  padding-top: 15px;
-}
+  /****** Cards ************/
+  .wg-card-image {
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 220px;
+    border-bottom-color: red;
+    border-bottom-width: 10px;
+    border-bottom-style: solid;
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
+  }
 
-/****** Login overlay **********/
-.cdk-overlay-dark-backdrop {
-  background: rgba(0, 0, 0, .32) !important;
-}
+  .wg-card-body {
+    padding: 0;
+    background-color: #f9f9f9;
+  }
 
-.mat-mdc-tab-header-pagination {
-  display: none !important;
-}
+  .wg-card {
+    border-style: none;
+    height: 500px;
+    margin-bottom: 50px;
+  }
 
-.mdc-tab-indicator--active {
-  border-bottom-color: var(--bs-orange) !important;
-  border-bottom-style: solid !important;
-  border-bottom-width: 5px !important;
-}
+  .wg-card-content {
+    padding: 15px;
+  }
 
-.mdc-tab-indicator{
-  visibility: hidden!important;
-}
+  .wg-card-title {
+    padding-top: 15px;
+  }
 
-.wg-identity-link{
-  color: gray;
-  font-size: smaller;
-  text-decoration: none;
-}
+  /****** Login overlay **********/
+  .cdk-overlay-dark-backdrop {
+    background: rgba(0, 0, 0, .32) !important;
+  }
 
-.wg-user-display-name{
-  border-bottom-color: var(--bs-orange) !important;
-  border-bottom-style: solid !important;
-  border-bottom-width: 3px !important;
-}
+  .mat-mdc-tab-header-pagination {
+    display: none !important;
+  }
 
-.login-status circle {
-  stroke: gray;
-}
+  .mdc-tab-indicator--active {
+    border-bottom-color: var(--bs-orange) !important;
+    border-bottom-style: solid !important;
+    border-bottom-width: 5px !important;
+  }
 
-.login-status{
-  display: inline-block;
-  padding-left: 20px;
-}
+  .mdc-tab-indicator {
+    visibility: hidden !important;
+  }
+
+  .wg-identity-link {
+    color: gray;
+    font-size: smaller;
+    text-decoration: none;
+  }
+
+  .wg-user-display-name {
+    border-bottom-color: var(--bs-orange) !important;
+    border-bottom-style: solid !important;
+    border-bottom-width: 3px !important;
+  }
+
+  .login-status circle {
+    stroke: gray;
+  }
+
+  .login-status {
+    display: inline-block;
+    padding-left: 20px;
+  }
