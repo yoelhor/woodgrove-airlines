@@ -108,3 +108,12 @@ nav {
   border-bottom-style: solid !important;
   border-bottom-width: 3px !important;
 }
+
+.login-status circle {
+  stroke: gray;
+}
+
+.login-status{
+  display: inline-block;
+  padding-left: 20px;
+}

@@ -1,6 +1,7 @@
 import { Component, ElementRef, Inject, ViewChild, EventEmitter, Output, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'
 
 @Component({
   selector: 'app-sign-in-with-pwd',
@@ -22,6 +23,7 @@ export class SignInWithPwdComponent {
   @ViewChild('signInPassword') signInPassword!: ElementRef;
 
   errorMessage = "";
+  loginStarts = false;
   
 
   GoToSSPR()
@@ -37,6 +39,8 @@ export class SignInWithPwdComponent {
   PasswordLogin_1_Initiate() {
 
     this.errorMessage = "";
+    this.loginStarts = true;
+
     const formData = new FormData();
     formData.append('client_id', environment.appID);
     formData.append('challenge_type', 'password redirect');
@@ -86,6 +90,7 @@ export class SignInWithPwdComponent {
         this.RetrieveDisplayName();
       }
       else {
+        this.loginStarts = false;
         if (result.error_description.includes("AADSTS50126") || result.error_description.includes("AADSTS9002313")) {
           this.errorMessage = "We couldn't find an account with this email address or password.";
         }
@@ -119,6 +124,7 @@ export class SignInWithPwdComponent {
       this.OverlayVisibilityEvent.emit(false);
       this.LoginButtonVisibilityEvent.emit(false);
 
+      this.loginStarts = false;
 
     }, error => console.error(error));
   }

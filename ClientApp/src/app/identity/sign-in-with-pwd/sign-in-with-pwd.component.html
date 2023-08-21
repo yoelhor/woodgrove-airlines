@@ -1,4 +1,5 @@
-<form>
+
+<form style="padding-left: 5px; padding-right: 5px;">
     <div class="mb-3">
         <label for="signInEmail" class="form-label">Email address</label>
         <input type="email" class="form-control" id="signInEmail" #signInEmail value="">
@@ -10,5 +11,10 @@
         <a href="#" class="wg-identity-link" (click)="GoToSSPR();"> Forgot password?</a>
     </div>
     <span style="color: red; display: block; padding-bottom: 10px;">{{errorMessage}}</span>
-    <button type="submit" class="btn btn-primary" (click)="PasswordLogin_1_Initiate();">Sign in</button>
+    <button type="submit" class="btn btn-primary" (click)="PasswordLogin_1_Initiate();">Sign in</button> 
+
+    <div class="login-status" *ngIf="loginStarts">
+        <mat-spinner [diameter]="25" style="display: inline-block;"></mat-spinner>
+    </div>
+    
 </form>

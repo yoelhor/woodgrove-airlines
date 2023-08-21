@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { OverlayModule } from "@angular/cdk/overlay";
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatIconModule} from '@angular/material/icon';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
@@ -43,6 +44,7 @@ import { ProfileComponent } from './profile/profile.component';
     OverlayModule,
     MatIconModule,
     MatTabsModule,
+    MatProgressSpinnerModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
