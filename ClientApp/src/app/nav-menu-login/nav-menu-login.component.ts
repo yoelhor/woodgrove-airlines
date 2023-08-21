@@ -8,15 +8,42 @@ import { display } from 'ngx-bootstrap-icons';
   styleUrls: ['./nav-menu-login.component.css']
 })
 export class NavMenuLoginComponent {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+    this.displayName = this.getDisplayName();
+  }
 
   isOpen = false;
   displayName = "";
   showLoginButton = true;
   userFlow = "signin";
 
+  getDisplayName(){
+
+    var dn = localStorage.getItem("displayName");
+
+    if (dn == null)
+    {
+      this.showLoginButton = true;
+      return "";
+    }
+    else
+    {
+      this.showLoginButton = false;
+      return dn;
+    }
+  }
+
+  public logout()
+  {
+    console.log("logout")
+    this.showLoginButton = true;
+    this.displayName = "";
+    localStorage.clear();
+  }
+
   updateDisplayName(displayName: string) {
     this.displayName = displayName;
+    localStorage.setItem("displayName", displayName);
   }
 
   updateOverlayVisibility(isOpen: boolean) {

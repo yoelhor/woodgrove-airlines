@@ -9,8 +9,10 @@
   <a *ngIf="showLoginButton == false" class="nav-link text-white wg-user-display-name"
     style="display: inline; padding-left: 0; padding-right: 0; display: inline-block; padding-top: px; padding-bottom: 2px;"
     [routerLink]="['/profile']">Welcome to {{displayName}}</a>
+    &nbsp; 
+    <a *ngIf="showLoginButton == false" class="nav-link text-white" href="#"  (click)="logout();"
+    style="display: inline; padding-left: 0; padding-right: 0; display: inline-block; padding-top: px; padding-bottom: 2px;"><i class="bi bi-box-arrow-in-right"></i></a>
 </li>
-
 
 <!-- The overlay object --->
 <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="isOpen"

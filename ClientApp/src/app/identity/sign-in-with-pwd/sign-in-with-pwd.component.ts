@@ -113,7 +113,7 @@ export class SignInWithPwdComponent {
     this.http.post<any>(environment.baseUrl + "profile", formData /*, { headers: headers }**/).subscribe(result => {
       console.log("Result from RetrieveDisplayName:");
       console.log(result);
-
+      
       // Update the parent component
       this.displayNameEvent.emit(result.name);
       this.OverlayVisibilityEvent.emit(false);
