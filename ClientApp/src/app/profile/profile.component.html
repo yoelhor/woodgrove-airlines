@@ -1,0 +1,34 @@
+<div class="container">
+
+
+    <h1 style="color: #003049; padding-bottom: 15px; padding-top: 15px;">Your claims and access token</h1>
+
+    <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+        {{errorMessage}}
+      </div>
+
+    <p *ngIf="!claims?.length"><em>Loading...</em></p>
+
+    <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="claims.length">
+        <thead>
+            <tr>
+                <th>Claim</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let claim of claims">
+                <td>{{claim.key}}</td>
+                <td>{{claim.value}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="collapse show" id="collapseExample">
+
+        <span>The <a
+                href="https://jwt.ms/#access_token={{accessToken}}"
+                target="_blank">https://jwt.ms</a> shows the access token used to call a web API.</span>
+
+    </div>
+</div>

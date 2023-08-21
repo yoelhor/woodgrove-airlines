@@ -19,6 +19,7 @@ import { SignInWithPwdComponent } from './identity/sign-in-with-pwd/sign-in-with
 import { SignInWithOtpComponent } from './identity/sign-in-with-otp/sign-in-with-otp.component';
 import { SignUpComponent } from './identity/sign-up/sign-up.component';
 import { SsprComponent } from './identity/sspr/sspr.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [ 
@@ -32,7 +33,8 @@ import { SsprComponent } from './identity/sspr/sspr.component';
     SignInWithPwdComponent,
     SignInWithOtpComponent,
     SignUpComponent,
-    SsprComponent
+    SsprComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -46,6 +48,7 @@ import { SsprComponent } from './identity/sspr/sspr.component';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
+      { path: 'profile', component: ProfileComponent },
     ])
   ],
   providers: [],
