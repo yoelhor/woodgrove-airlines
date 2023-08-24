@@ -1,7 +1,7 @@
 import { Component, ElementRef, Inject, ViewChild, EventEmitter, Output, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 
 @Component({
   selector: 'app-sign-in-with-pwd',
@@ -24,18 +24,16 @@ export class SignInWithPwdComponent {
 
   errorMessage = "";
   loginStarts = false;
-  
 
-  GoToSSPR()
-  {
+
+  GoToSSPR() {
     this.UserFlowEvent.emit("sspr");
   }
 
-  GoToSignUp()
-  {
+  GoToSignUp() {
     this.UserFlowEvent.emit("signup");
   }
-  
+
   PasswordLogin_1_Initiate() {
 
     this.errorMessage = "";
@@ -51,8 +49,15 @@ export class SignInWithPwdComponent {
       console.log("Result from PasswordLogin_1_Initiate:");
       console.log(result);
 
-      // Call the challenge endpoint 
-      this.PasswordLogin_2_Challenge(result.credential_token);
+      if (result.error) {
+        // Error handling
+        this.loginStarts = false;
+        this.errorMessage = result.error_description;
+      }
+      else {
+        // Call the challenge endpoint 
+        this.PasswordLogin_2_Challenge(result.credential_token);
+      }
 
     }, error => console.error(error));
   }
@@ -66,7 +71,15 @@ export class SignInWithPwdComponent {
 
     this.http.post<any>(environment.baseUrl + 'Proxy/challenge', formData).subscribe(result => {
       console.log("Result from PasswordLogin_2_Challenge:");
-      this.PasswordLogin_3_Token(result.credential_token);
+
+      if (result.error) {
+        // Error handling
+        this.loginStarts = false;
+        this.errorMessage = result.error_description;
+      }
+      else {
+        this.PasswordLogin_3_Token(result.credential_token);
+      }
     }, error => console.error(error));
   }
 
@@ -118,7 +131,7 @@ export class SignInWithPwdComponent {
     this.http.post<any>(environment.baseUrl + "profile", formData /*, { headers: headers }**/).subscribe(result => {
       console.log("Result from RetrieveDisplayName:");
       console.log(result);
-      
+
       // Update the parent component
       this.displayNameEvent.emit(result.name);
       this.OverlayVisibilityEvent.emit(false);

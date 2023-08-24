@@ -17,23 +17,30 @@ export class SignInWithOtpComponent {
   @Output() OverlayVisibilityEvent = new EventEmitter<boolean>();
   @Output() LoginButtonVisibilityEvent = new EventEmitter<boolean>();
   @Output() UserFlowEvent = new EventEmitter<string>();
-  
+
   @ViewChild('signInEmail') signInEmail!: ElementRef;
   @ViewChild('signInPassword') signInPassword!: ElementRef;
 
   errorMessage = "";
+  loginStarts = false;
 
-  GoToSignUp()
-  {
+
+  GoToSSPR() {
+    this.UserFlowEvent.emit("sspr");
+  }
+
+  GoToSignUp() {
     this.UserFlowEvent.emit("signup");
   }
 
   OtpLogin_1_Initiate() {
 
     this.errorMessage = "";
+    this.loginStarts = true;
+
     const formData = new FormData();
     formData.append('client_id', environment.appID);
-    formData.append('challenge_type', 'password redirect');
+    formData.append('challenge_type', 'redirect oob');
     formData.append('username', this.signInEmail.nativeElement.value);
 
     this.http.post<any>(environment.baseUrl + 'Proxy/initiate', formData).subscribe(result => {
@@ -41,8 +48,15 @@ export class SignInWithOtpComponent {
       console.log("Result from OtpLogin_1_Initiate:");
       console.log(result);
 
-      // Call the challenge endpoint 
-      this.OtpLogin_2_Challenge(result.credential_token);
+      if (result.error) {
+        // Error handling
+        this.loginStarts = false;
+        this.errorMessage = result.error_description;
+      }
+      else {
+        // Call the challenge endpoint 
+        this.OtpLogin_2_Challenge(result.credential_token);
+      }
 
     }, error => console.error(error));
   }
@@ -51,12 +65,20 @@ export class SignInWithOtpComponent {
 
     const formData = new FormData();
     formData.append('client_id', environment.appID);
-    formData.append('challenge_type', 'password redirect');
+    //formData.append('challenge_type', 'password redirect');
     formData.append('credential_token', credential_token);
 
     this.http.post<any>(environment.baseUrl + 'Proxy/challenge', formData).subscribe(result => {
       console.log("Result from OtpLogin_2_Challenge:");
-      this.OtpLogin_3_Token(result.credential_token);
+
+      if (result.error) {
+        // Error handling
+        this.loginStarts = false;
+        this.errorMessage = result.error_description;
+      }
+      else {
+        this.OtpLogin_3_Token(result.credential_token);
+      }
     }, error => console.error(error));
   }
 
@@ -80,6 +102,7 @@ export class SignInWithOtpComponent {
         this.RetrieveDisplayName();
       }
       else {
+        this.loginStarts = false;
         if (result.error_description.includes("AADSTS50126") || result.error_description.includes("AADSTS9002313")) {
           this.errorMessage = "We couldn't find an account with this email address or password.";
         }
@@ -113,6 +136,7 @@ export class SignInWithOtpComponent {
       this.OverlayVisibilityEvent.emit(false);
       this.LoginButtonVisibilityEvent.emit(false);
 
+      this.loginStarts = false;
 
     }, error => console.error(error));
   }

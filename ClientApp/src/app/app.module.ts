@@ -18,9 +18,10 @@ import { HomeJumbotronComponent } from './home-jumbotron/home-jumbotron.componen
 import { NavMenuLoginComponent } from './nav-menu-login/nav-menu-login.component';
 import { SignInWithPwdComponent } from './identity/sign-in-with-pwd/sign-in-with-pwd.component';
 import { SignInWithOtpComponent } from './identity/sign-in-with-otp/sign-in-with-otp.component';
-import { SignUpComponent } from './identity/sign-up/sign-up.component';
 import { SsprComponent } from './identity/sspr/sspr.component';
 import { ProfileComponent } from './profile/profile.component';
+import { SignUpWithPwdComponent } from './identity/sign-up-with-pwd/sign-up-with-pwd.component';
+import { SignUpWithOtpComponent } from './identity/sign-up-with-otp/sign-up-with-otp.component';
 
 @NgModule({
   declarations: [ 
@@ -33,9 +34,10 @@ import { ProfileComponent } from './profile/profile.component';
     NavMenuLoginComponent,
     SignInWithPwdComponent,
     SignInWithOtpComponent,
-    SignUpComponent,
     SsprComponent,
-    ProfileComponent
+    ProfileComponent,
+    SignUpWithPwdComponent,
+    SignUpWithOtpComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

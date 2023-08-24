@@ -9,9 +9,10 @@
   <a *ngIf="showLoginButton == false" class="nav-link text-white wg-user-display-name"
     style="display: inline; padding-left: 0; padding-right: 0; display: inline-block; padding-top: px; padding-bottom: 2px;"
     [routerLink]="['/profile']">Welcome to {{displayName}}</a>
-    &nbsp; 
-    <a *ngIf="showLoginButton == false" class="nav-link text-white" href="#"  (click)="logout();"
-    style="display: inline; padding-left: 0; padding-right: 0; display: inline-block; padding-top: px; padding-bottom: 2px;"><i class="bi bi-box-arrow-in-right"></i></a>
+  &nbsp;
+  <a *ngIf="showLoginButton == false" class="nav-link text-white" href="#" (click)="logout();"
+    style="display: inline; padding-left: 0; padding-right: 0; display: inline-block; padding-top: px; padding-bottom: 2px;"><i
+      class="bi bi-box-arrow-in-right"></i></a>
 </li>
 
 <!-- The overlay object --->
@@ -78,10 +79,32 @@
 
     <!--Sign-up flow-->
     <div style="background-color: white; margin-top: -10px;" *ngIf="userFlow == 'signup'">
-      <app-sign-up (displayNameEvent)="updateDisplayName($event)"
-        (OverlayVisibilityEvent)="updateOverlayVisibility($event)"
-        (LoginButtonVisibilityEvent)="updateLoginButtonVisibility($event)"
-        (UserFlowEvent)="updateUserFlow($event)"></app-sign-up>
+
+      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <i class="bi bi-shield-lock"></i>&nbsp; Email & password
+          </ng-template>
+
+          <div style="margin-top: 15px;"></div>
+          <app-sign-up-with-pwd (displayNameEvent)="updateDisplayName($event)"
+            (OverlayVisibilityEvent)="updateOverlayVisibility($event)"
+            (LoginButtonVisibilityEvent)="updateLoginButtonVisibility($event)"
+            (UserFlowEvent)="updateUserFlow($event)"></app-sign-up-with-pwd>
+        </mat-tab>
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <i class="bi bi-send"></i>&nbsp; Email & passcode
+          </ng-template>
+
+          <div style="margin-top: 15px;"></div>
+          <app-sign-up-with-otp (displayNameEvent)="updateDisplayName($event)"
+            (OverlayVisibilityEvent)="updateOverlayVisibility($event)"
+            (LoginButtonVisibilityEvent)="updateLoginButtonVisibility($event)"
+            (UserFlowEvent)="updateUserFlow($event)"></app-sign-up-with-otp>
+        </mat-tab>
+      </mat-tab-group>
     </div>
   </div>
 </ng-template>
