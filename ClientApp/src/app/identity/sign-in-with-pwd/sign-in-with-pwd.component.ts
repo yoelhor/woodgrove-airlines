@@ -24,6 +24,8 @@ export class SignInWithPwdComponent {
 
   errorMessage = "";
   loginStarts = false;
+  showSignUpLink = false;
+  showOtpLink = false;
 
 
   GoToSSPR() {
@@ -31,13 +33,15 @@ export class SignInWithPwdComponent {
   }
 
   GoToSignUp() {
-    this.UserFlowEvent.emit("signup");
+    this.UserFlowEvent.emit("sspr");
   }
 
   PasswordLogin_1_Initiate() {
 
     this.errorMessage = "";
     this.loginStarts = true;
+    this.showSignUpLink = false;
+    this.showOtpLink = false;
 
     const formData = new FormData();
     formData.append('client_id', environment.appID);
@@ -51,12 +55,27 @@ export class SignInWithPwdComponent {
 
       if (result.error) {
         // Error handling
+        if (result.error_description.includes("AADSTS50034")) {
+          this.errorMessage = "We couldn't find an account with this email address.";
+          this.showSignUpLink = true;
+        }
+        else {
+          this.loginStarts = false;
+          this.errorMessage = result.error_description;
+        }
+
         this.loginStarts = false;
-        this.errorMessage = result.error_description;
       }
       else {
-        // Call the challenge endpoint 
-        this.PasswordLogin_2_Challenge(result.credential_token);
+        if (result.challenge_type == "redirect") {
+          this.errorMessage = "You cannot sign-in with your email and password.";
+          this.showOtpLink = true;
+          this.loginStarts = false;
+        }
+        else {
+          // Call the challenge endpoint 
+          this.PasswordLogin_2_Challenge(result.credential_token);
+        }
       }
 
     }, error => console.error(error));
@@ -71,6 +90,7 @@ export class SignInWithPwdComponent {
 
     this.http.post<any>(environment.baseUrl + 'Proxy/challenge', formData).subscribe(result => {
       console.log("Result from PasswordLogin_2_Challenge:");
+      console.log(result);
 
       if (result.error) {
         // Error handling

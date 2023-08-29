@@ -10,7 +10,9 @@
         <input type="password" class="form-control" id="signInPassword" #signInPassword value="">
         <a href="#" class="wg-identity-link" (click)="GoToSSPR();"> Forgot password?</a>
     </div>
-    <span style="color: red; display: block; padding-bottom: 10px;">{{errorMessage}}</span>
+    <span style="color: red; display: block; padding-bottom: 10px;">{{errorMessage}}</span> 
+    <a style="color: red; margin-top: -10px; margin-bottom: 15px; display: block;" href="#" *ngIf="showSignUpLink" (click)="GoToSignUp();"> Click here to create a new account.</a>
+    <a style="color: red; margin-top: -10px; margin-bottom: 15px; display: block;" href="#" *ngIf="showOtpLink" (click)="GoToSignUp();"> Click here to sign-in wiht email and passcode.</a>
     <button type="submit" class="btn btn-primary" (click)="PasswordLogin_1_Initiate();">Sign in</button> 
 
     <div class="login-status" *ngIf="loginStarts">
