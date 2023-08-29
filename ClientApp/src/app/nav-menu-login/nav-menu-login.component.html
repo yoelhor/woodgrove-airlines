@@ -1,6 +1,6 @@
 <li>
   <button class="btn btn-link" style="color: white; text-decoration: none;"
-    (click)="isOpen = !isOpen; userFlow = 'signin'" cdkOverlayOrigin #trigger="cdkOverlayOrigin"
+    (click)="isOpen = !isOpen; userFlow = 'signin'; signInTabIndex = 0; " cdkOverlayOrigin #trigger="cdkOverlayOrigin"
     [style.display]="showLoginButton ? '' : 'none'">
     <!-- The condition on the next line should be changed to user identity -->
     {{isOpen ? "Login" : "Login"}}
