@@ -33,7 +33,11 @@ export class SignInWithPwdComponent {
   }
 
   GoToSignUp() {
-    this.UserFlowEvent.emit("sspr");
+    this.UserFlowEvent.emit("signup");
+  }
+
+  GoToOTP(){
+
   }
 
   PasswordLogin_1_Initiate() {
