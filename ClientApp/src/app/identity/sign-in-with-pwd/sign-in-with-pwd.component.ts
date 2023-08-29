@@ -18,6 +18,7 @@ export class SignInWithPwdComponent {
   @Output() OverlayVisibilityEvent = new EventEmitter<boolean>();
   @Output() LoginButtonVisibilityEvent = new EventEmitter<boolean>();
   @Output() UserFlowEvent = new EventEmitter<string>();
+  @Output() AuthMethodEvent = new EventEmitter<string>();
 
   @ViewChild('signInEmail') signInEmail!: ElementRef;
   @ViewChild('signInPassword') signInPassword!: ElementRef;
@@ -37,7 +38,7 @@ export class SignInWithPwdComponent {
   }
 
   GoToOTP(){
-
+    this.AuthMethodEvent.emit("otp");
   }
 
   PasswordLogin_1_Initiate() {

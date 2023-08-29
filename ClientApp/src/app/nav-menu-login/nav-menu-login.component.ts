@@ -16,6 +16,8 @@ export class NavMenuLoginComponent {
   displayName = "";
   showLoginButton = true;
   userFlow = "signin";
+  signInTabIndex = 0;
+  authMethod = "password";
 
   getDisplayName(){
 
@@ -56,5 +58,14 @@ export class NavMenuLoginComponent {
 
   updateUserFlow(userFlow: string) {
     this.userFlow = userFlow;
+  }
+
+  updateAuthMethod(authMethod: string) {
+    this.authMethod = authMethod;
+
+    if (this.authMethod == "otp")
+    {
+      this.signInTabIndex = 1;
+    }
   }
 }

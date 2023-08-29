@@ -42,7 +42,7 @@
 
     <!--Sign-in with both email and password and OTP-->
     <div style="background-color: white; margin-top: -10px;" *ngIf="userFlow == 'signin'">
-      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" [(selectedIndex)]="signInTabIndex">
         <mat-tab>
           <ng-template mat-tab-label>
             <i class="bi bi-shield-lock"></i>&nbsp; Email & password
@@ -52,9 +52,9 @@
           <app-sign-in-with-pwd (displayNameEvent)="updateDisplayName($event)"
             (OverlayVisibilityEvent)="updateOverlayVisibility($event)"
             (LoginButtonVisibilityEvent)="updateLoginButtonVisibility($event)"
-            (UserFlowEvent)="updateUserFlow($event)"></app-sign-in-with-pwd>
+            (UserFlowEvent)="updateUserFlow($event)"
+            (AuthMethodEvent)="updateAuthMethod($event)"></app-sign-in-with-pwd>
         </mat-tab>
-
         <mat-tab>
           <ng-template mat-tab-label>
             <i class="bi bi-send"></i>&nbsp; Email & passcode
