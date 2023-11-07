@@ -125,7 +125,7 @@ export class SignUpWithPwdComponent {
     formData.append('grant_type', 'slt');
     formData.append('signin_slt', signin_slt);
     formData.append('username', this.username);
-    formData.append('scope', "openid offline_access");
+    formData.append('scope', environment.scopes);
 
     this.http.post<any>(environment.baseUrl + 'Proxy/token', formData).subscribe(result => {
       console.log("Result from SignUpToken:");

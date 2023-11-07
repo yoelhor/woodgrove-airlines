@@ -67,7 +67,7 @@ export class SsprComponent {
     formData.append('grant_type', 'password');
     formData.append('password', this.signInPassword.nativeElement.value);
     formData.append('credential_token', credential_token);
-    formData.append('scope', "openid offline_access");
+    formData.append('scope', environment.scopes);
 
     this.http.post<any>(environment.baseUrl + 'Proxy/token', formData).subscribe(result => {
       console.log("Result from SSPR_3_Token:");
