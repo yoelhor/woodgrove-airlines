@@ -9,8 +9,8 @@ namespace woodgrove_airlines.Controllers;
 [Route("[controller]")]
 public class ProxyController : ControllerBase
 {
-    private static readonly string baseUrl = "https://KaushikTrialTenantSKZv6b6b.ciamlogin.com/89892c1c-be76-45dc-81f8-2cf4168182ec";
-    private static readonly string baseUrlParams = "?dc=ESTS-PUB-NEULR1-AZ1-FD000-TEST1";
+    private static readonly string baseUrl = "https://wggdemo.ciamlogin.com/818fbfd7-0338-45d3-8cc8-8d521cc578b2";
+    private static readonly string baseUrlParams = "";
 
     //private static readonly string baseUrl = "https://wggdev.ciamlogin.com/wggdev.onmicrosoft.com";
     //private static readonly string baseUrlParams = "?dc=ESTS-PUB-WUS2-AZ1-FD000-TEST1";
