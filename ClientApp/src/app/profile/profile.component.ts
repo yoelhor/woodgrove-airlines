@@ -28,7 +28,7 @@ export class ProfileComponent {
 
     formData.append('accessToken', this.accessToken);
 
-    this.http.post<any>(environment.baseUrl + "profile", formData /*, { headers: headers }**/).subscribe(result => {
+    this.http.post<any>(environment.appUrl + "profile", formData /*, { headers: headers }**/).subscribe(result => {
       console.log("Result from RetrieveDisplayName:");
       console.log(Object.keys(result));
 

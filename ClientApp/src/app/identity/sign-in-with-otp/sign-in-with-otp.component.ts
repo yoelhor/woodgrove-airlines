@@ -43,7 +43,7 @@ export class SignInWithOtpComponent {
     formData.append('challenge_type', 'redirect oob');
     formData.append('username', this.signInEmail.nativeElement.value);
 
-    this.http.post<any>(environment.baseUrl + 'Proxy/initiate', formData).subscribe(result => {
+    this.http.post<any>(environment.baseUrl + '/oauth2/v2.0/initiate', formData).subscribe(result => {
 
       console.log("Result from OtpLogin_1_Initiate:");
       console.log(result);
@@ -68,7 +68,7 @@ export class SignInWithOtpComponent {
     //formData.append('challenge_type', 'password redirect');
     formData.append('credential_token', credential_token);
 
-    this.http.post<any>(environment.baseUrl + 'Proxy/challenge', formData).subscribe(result => {
+    this.http.post<any>(environment.baseUrl + '/oauth2/v2.0/challenge', formData).subscribe(result => {
       console.log("Result from OtpLogin_2_Challenge:");
 
       if (result.error) {
@@ -91,7 +91,7 @@ export class SignInWithOtpComponent {
     formData.append('credential_token', credential_token);
     formData.append('scope', environment.scopes);
 
-    this.http.post<any>(environment.baseUrl + 'Proxy/token', formData).subscribe(result => {
+    this.http.post<any>(environment.baseUrl + '/oauth2/v2.0/token', formData).subscribe(result => {
       console.log("Result from OtpLogin_3_Token:");
       console.log(result);
 
@@ -127,7 +127,7 @@ export class SignInWithOtpComponent {
     const formData = new FormData();
     formData.append('accessToken', `${localStorage.getItem('accessToken')}`);
 
-    this.http.post<any>(environment.baseUrl + "profile", formData /*, { headers: headers }**/).subscribe(result => {
+    this.http.post<any>(environment.appUrl + "profile", formData /*, { headers: headers }**/).subscribe(result => {
       console.log("Result from RetrieveDisplayName:");
       console.log(result);
 

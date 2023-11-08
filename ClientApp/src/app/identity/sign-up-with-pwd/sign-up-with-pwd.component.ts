@@ -48,7 +48,7 @@ export class SignUpWithPwdComponent {
     formData.append('password', this.attPassword.nativeElement.value);
     formData.append('attributes', '{"displayName": "' + this.attDisplayName.nativeElement.value + '"}');
 
-    this.http.post<any>(environment.baseUrl + 'Proxy/signup/start', formData).subscribe(result => {
+    this.http.post<any>(environment.baseUrl + '/signup/v1.0/start', formData).subscribe(result => {
 
       console.log("Result from SignUpStart:");
       console.log(result);
@@ -74,7 +74,7 @@ export class SignUpWithPwdComponent {
     formData.append('client_id', environment.appID);
     formData.append('signup_token', signup_token);
 
-    this.http.post<any>(environment.baseUrl + 'Proxy/signup/challenge', formData).subscribe(result => {
+    this.http.post<any>(environment.baseUrl + '/signup/v1.0/challenge', formData).subscribe(result => {
       console.log("Result from SignUpChallenge:");
       console.log(result);
 
@@ -102,7 +102,7 @@ export class SignUpWithPwdComponent {
     formData.append('signup_token', this.signup_token);
     formData.append('oob', this.attOTP.nativeElement.value);
 
-    this.http.post<any>(environment.baseUrl + 'Proxy/signup/continue', formData).subscribe(result => {
+    this.http.post<any>(environment.baseUrl + '/signup/v1.0/continue', formData).subscribe(result => {
       console.log("Result from SignUpVerifyOOB:");
       console.log(result);
 
@@ -127,7 +127,7 @@ export class SignUpWithPwdComponent {
     formData.append('username', this.username);
     formData.append('scope', environment.scopes);
 
-    this.http.post<any>(environment.baseUrl + 'Proxy/token', formData).subscribe(result => {
+    this.http.post<any>(environment.baseUrl + '/oauth2/v2.0/token', formData).subscribe(result => {
       console.log("Result from SignUpToken:");
       console.log(result);
 
@@ -157,7 +157,7 @@ export class SignUpWithPwdComponent {
     const formData = new FormData();
     formData.append('accessToken', `${localStorage.getItem('accessToken')}`);
 
-    this.http.post<any>(environment.baseUrl + "profile", formData /*, { headers: headers }**/).subscribe(result => {
+    this.http.post<any>(environment.appUrl + "profile", formData /*, { headers: headers }**/).subscribe(result => {
       console.log("Result from RetrieveDisplayName:");
       console.log(result);
 
