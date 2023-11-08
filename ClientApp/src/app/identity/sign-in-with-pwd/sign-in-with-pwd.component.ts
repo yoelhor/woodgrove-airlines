@@ -83,7 +83,11 @@ export class SignInWithPwdComponent {
         }
       }
 
-    }, error => console.error(error));
+    }, error => {
+      console.error(error);
+      this.errorMessage = error.message;
+      this.loginStarts = false;
+    } );
   }
 
   PasswordLogin_2_Challenge(credential_token: string) {
@@ -105,7 +109,11 @@ export class SignInWithPwdComponent {
       else {
         this.PasswordLogin_3_Token(result.credential_token);
       }
-    }, error => console.error(error));
+    }, error => {
+      console.error(error);
+      this.errorMessage = error.message;
+      this.loginStarts = false;
+    });
   }
 
   PasswordLogin_3_Token(credential_token: string) {
@@ -138,7 +146,11 @@ export class SignInWithPwdComponent {
 
       }
 
-    }, error => console.error(error));
+    }, error => {
+      console.error(error);
+      this.errorMessage = error.message;
+      this.loginStarts = false;
+    });
   }
 
   RetrieveDisplayName() {
