@@ -37,11 +37,13 @@ export class SignInWithPwdComponent {
     this.UserFlowEvent.emit("signup");
   }
 
-  GoToOTP(){
+  GoToOTP() {
     this.AuthMethodEvent.emit("otp");
   }
 
   PasswordLogin_1_Initiate() {
+
+    console.log("PasswordLogin_1_Initiate started");
 
     this.errorMessage = "";
     this.loginStarts = true;
@@ -55,42 +57,43 @@ export class SignInWithPwdComponent {
 
     this.http.post<any>(environment.baseUrl + '/oauth2/v2.0/initiate', formData).subscribe(result => {
 
-      console.log("Result from PasswordLogin_1_Initiate:");
+      console.log("Result from PasswordLogin_1_Initiate result:");
       console.log(result);
 
-      if (result.error) {
-        // Error handling
-        if (result.error_description.includes("AADSTS50034")) {
-          this.errorMessage = "We couldn't find an account with this email address.";
-          this.showSignUpLink = true;
-        }
-        else {
-          this.loginStarts = false;
-          this.errorMessage = result.error_description;
-        }
-
+      if (result.challenge_type == "redirect") {
+        this.errorMessage = "You cannot sign-in with your email and password.";
+        this.showOtpLink = true;
         this.loginStarts = false;
       }
       else {
-        if (result.challenge_type == "redirect") {
-          this.errorMessage = "You cannot sign-in with your email and password.";
-          this.showOtpLink = true;
-          this.loginStarts = false;
-        }
-        else {
-          // Call the challenge endpoint 
-          this.PasswordLogin_2_Challenge(result.credential_token);
-        }
+        // Call the challenge endpoint 
+        this.PasswordLogin_2_Challenge(result.credential_token);
+
       }
 
-    }, error => {
-      console.error(error);
-      this.errorMessage = error.message;
+    }, response => {
+      console.log("Result from PasswordLogin_1_Initiate error:");
+      console.log(response.error);
+
+      // Error handling
+      if (response.error.error_description.includes("AADSTS50034")) {
+        this.errorMessage = "We couldn't find an account with this email address.";
+        this.showSignUpLink = true;
+      }
+      else {
+        this.loginStarts = false;
+        this.errorMessage = this.GetErrorMessage(response.error);
+      }
+
       this.loginStarts = false;
-    } );
+      this.loginStarts = false;
+    });
   }
 
+
   PasswordLogin_2_Challenge(credential_token: string) {
+
+    console.log("PasswordLogin_2_Challenge started");
 
     const formData = new FormData();
     formData.append('client_id', environment.appID);
@@ -98,7 +101,7 @@ export class SignInWithPwdComponent {
     formData.append('credential_token', credential_token);
 
     this.http.post<any>(environment.baseUrl + '/oauth2/v2.0/challenge', formData).subscribe(result => {
-      console.log("Result from PasswordLogin_2_Challenge:");
+
       console.log(result);
 
       if (result.error) {
@@ -118,6 +121,8 @@ export class SignInWithPwdComponent {
 
   PasswordLogin_3_Token(credential_token: string) {
 
+    console.log("PasswordLogin_3_Token started");
+
     const formData = new FormData();
     formData.append('client_id', environment.appID);
     formData.append('grant_type', 'password');
@@ -126,7 +131,7 @@ export class SignInWithPwdComponent {
     formData.append('scope', environment.scopes);
 
     this.http.post<any>(environment.baseUrl + '/oauth2/v2.0/token', formData).subscribe(result => {
-      console.log("Result from PasswordLogin_3_Token:");
+
       console.log(result);
 
       // Can be replaced with sessionStorage
@@ -182,5 +187,17 @@ export class SignInWithPwdComponent {
   closeOverlay() {
     this.OverlayVisibilityEvent.emit(false);
     this.LoginButtonVisibilityEvent.emit(true);
+  }
+
+  GetErrorMessage(error: any) {
+    if (error.error_description) {
+      let i = error.error_description.indexOf("Trace");
+
+      if (i > 0) {
+        return error.error_description.substring(0, i - 1)
+      }
+    }
+
+    return error.message;
   }
 }

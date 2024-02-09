@@ -1,5 +1,5 @@
 import { Component, ElementRef, Inject, ViewChild, EventEmitter, Output, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 
@@ -38,6 +38,8 @@ export class SignUpWithPwdComponent {
 
   SignUpStart() {
 
+    console.log("SignUpStart started");
+
     this.errorMessage = "";
     this.loginStarts = true;
 
@@ -46,36 +48,40 @@ export class SignUpWithPwdComponent {
     formData.append('challenge_type', 'redirect oob password');
     formData.append('username', this.attEmail.nativeElement.value);
     formData.append('password', this.attPassword.nativeElement.value);
-    formData.append('attributes', '{"displayName": "' + this.attDisplayName.nativeElement.value + '"}');
+    formData.append('attributes',
+      '{"displayName": "' + this.attDisplayName.nativeElement.value + '", "extension_0cae61cc83e94edd978ec2fde3c5f2f3_PolicyAgreement" : true}');
 
     this.http.post<any>(environment.baseUrl + '/signup/v1.0/start', formData).subscribe(result => {
 
-      console.log("Result from SignUpStart:");
       console.log(result);
 
-      if (result.error) {
+    }, errorResponse => {
 
-        if (result.error != "verification_required") {
-          // Error handling
-          this.loginStarts = false;
-          this.errorMessage = result.error_description;
-        }
-        else {
-          // Call the challenge endpoint 
-          this.SignUpChallenge(result.signup_token);
-        }
+      console.log(errorResponse);
+
+      if (errorResponse.error.error === "verification_required") {
+        // Call the challenge endpoint 
+        this.SignUpChallenge(errorResponse.error.signup_token);
       }
-    }, error => console.error(error));
+      else {
+        // Error handling
+        this.loginStarts = false;
+        this.errorMessage = this.GetErrorMessage(errorResponse.error);
+      }
+
+    });
   }
 
   SignUpChallenge(signup_token: string) {
+
+    console.log("SignUpChallenge started");
 
     const formData = new FormData();
     formData.append('client_id', environment.appID);
     formData.append('signup_token', signup_token);
 
     this.http.post<any>(environment.baseUrl + '/signup/v1.0/challenge', formData).subscribe(result => {
-      console.log("Result from SignUpChallenge:");
+
       console.log(result);
 
       if (result.error) {
@@ -95,6 +101,7 @@ export class SignUpWithPwdComponent {
 
 
   SignUpVerifyOOB() {
+    console.log("SignUpVerifyOOB started");
 
     const formData = new FormData();
     formData.append('client_id', environment.appID);
@@ -103,22 +110,25 @@ export class SignUpWithPwdComponent {
     formData.append('oob', this.attOTP.nativeElement.value);
 
     this.http.post<any>(environment.baseUrl + '/signup/v1.0/continue', formData).subscribe(result => {
-      console.log("Result from SignUpVerifyOOB:");
+
       console.log(result);
 
-      if (result.error) {
-        // Error handling
-        this.loginStarts = false;
-        this.errorMessage = result.error_description;
-      }
-      else {
-        this.SignUpToken(result.signin_slt)
-      }
+      this.SignUpToken(result.signin_slt);
 
-    }, error => console.error(error));
+    }, errorResponse => {
+
+      console.log(errorResponse);
+
+      // Error handling
+      this.loginStarts = false;
+      this.errorMessage = this.GetErrorMessage(errorResponse.error);
+
+    });
   }
 
   SignUpToken(signin_slt: string) {
+
+    console.log("SignUpToken started");
 
     const formData = new FormData();
     formData.append('client_id', environment.appID);
@@ -128,24 +138,26 @@ export class SignUpWithPwdComponent {
     formData.append('scope', environment.scopes);
 
     this.http.post<any>(environment.baseUrl + '/oauth2/v2.0/token', formData).subscribe(result => {
-      console.log("Result from SignUpToken:");
+
       console.log(result);
 
-      // Can be replaced with sessionStorage
-      if (result.error) {
-        // Error handling
-        this.loginStarts = false;
-        this.errorMessage = result.error_description;
-      }
-      else {
-        localStorage.setItem("accessToken", result.access_token);
-        this.RetrieveDisplayName();
-      }
+      localStorage.setItem("accessToken", result.access_token);
+      this.RetrieveDisplayName();
 
-    }, error => console.error(error));
+    }, errorResponse => {
+
+      console.log(errorResponse);
+
+      // Error handling
+      this.loginStarts = false;
+      this.errorMessage = this.GetErrorMessage(errorResponse.error)
+    }
+    );
   }
 
   RetrieveDisplayName() {
+
+    console.log("RetrieveDisplayName started");
 
     var headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -174,5 +186,17 @@ export class SignUpWithPwdComponent {
   closeOverlay() {
     this.OverlayVisibilityEvent.emit(false);
     this.LoginButtonVisibilityEvent.emit(true);
+  }
+
+  GetErrorMessage(error: any) {
+    if (error.error_description) {
+      let i = error.error_description.indexOf("Trace");
+
+      if (i > 0) {
+        return error.error_description.substring(0, i - 1)
+      }
+    }
+
+    return error.message;
   }
 }
