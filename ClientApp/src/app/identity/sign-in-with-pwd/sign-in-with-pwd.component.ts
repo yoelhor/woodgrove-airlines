@@ -135,26 +135,20 @@ export class SignInWithPwdComponent {
       console.log(result);
 
       // Can be replaced with sessionStorage
-      if (!result.error) {
-        // Can be replaced with sessionStorage
-        localStorage.setItem("accessToken", result.access_token);
-        this.RetrieveDisplayName();
+      localStorage.setItem("accessToken", result.access_token);
+      this.RetrieveDisplayName();
+
+    }, errorResponse => {
+      console.error(errorResponse);
+
+      this.loginStarts = false;
+      if (errorResponse.error.error_description.includes("AADSTS50126") || errorResponse.error.error_description.includes("AADSTS9002313")) {
+        this.errorMessage = "We couldn't find an account with this email address or password.";
       }
       else {
-        this.loginStarts = false;
-        if (result.error_description.includes("AADSTS50126") || result.error_description.includes("AADSTS9002313")) {
-          this.errorMessage = "We couldn't find an account with this email address or password.";
-        }
-        else {
-          this.errorMessage = result.error_description;
-        }
+        this.errorMessage = this.GetErrorMessage(errorResponse.error);
 
       }
-
-    }, error => {
-      console.error(error);
-      this.errorMessage = error.message;
-      this.loginStarts = false;
     });
   }
 

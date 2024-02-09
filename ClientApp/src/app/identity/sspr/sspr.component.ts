@@ -1,6 +1,7 @@
 import { Component, ElementRef, Inject, ViewChild, EventEmitter, Output, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { Time } from '@angular/common';
 
 @Component({
   selector: 'app-sspr',
@@ -18,106 +19,179 @@ export class SsprComponent {
   @Output() LoginButtonVisibilityEvent = new EventEmitter<boolean>();
   @Output() UserFlowEvent = new EventEmitter<string>();
 
-  @ViewChild('signInEmail') signInEmail!: ElementRef;
-  @ViewChild('signInPassword') signInPassword!: ElementRef;
+  @ViewChild('attEmail') attEmail!: ElementRef;
+  @ViewChild('attPassword') attPassword!: ElementRef;
+  @ViewChild('attOTP') attOTP!: ElementRef;
 
   errorMessage = "";
+  step = 1;
+  password_reset_token = "";
+  showSpinner = false;
+  interval: any;
 
-  GoToSignIn()
-  {
+  GoToSignIn() {
     this.UserFlowEvent.emit("signin");
   }
 
-  SSPR_1_Initiate() {
+  SSPR_1_Start() {
+
+    console.log("SSPR_1_Start started");
 
     this.errorMessage = "";
+    this.showSpinner = true;
     const formData = new FormData();
     formData.append('client_id', environment.appID);
-    formData.append('challenge_type', 'password redirect');
-    formData.append('username', this.signInEmail.nativeElement.value);
+    formData.append('challenge_type', 'oob redirect');
+    formData.append('username', this.attEmail.nativeElement.value);
 
-    this.http.post<any>(environment.baseUrl + '/oauth2/v2.0/initiate', formData).subscribe(result => {
+    this.http.post<any>(environment.baseUrl + '/resetpassword/v1.0/start', formData).subscribe(result => {
 
-      console.log("Result from SSPR_1_Initiate:");
       console.log(result);
 
       // Call the challenge endpoint 
-      this.SSPR_2_Challenge(result.credential_token);
+      this.SSPR_2_Challenge(result.password_reset_token);
 
-    }, error => console.error(error));
+    }, errorResponse => {
+
+      console.log(errorResponse);
+
+      // Error handling;
+      this.errorMessage = this.GetErrorMessage(errorResponse.error)
+    });
   }
 
   SSPR_2_Challenge(credential_token: string) {
 
-    const formData = new FormData();
-    formData.append('client_id', environment.appID);
-    formData.append('challenge_type', 'password redirect');
-    formData.append('credential_token', credential_token);
-
-    this.http.post<any>(environment.baseUrl + '/oauth2/v2.0/challenge', formData).subscribe(result => {
-      console.log("Result from SSPR_2_Challenge:");
-      this.SSPR_3_Token(result.credential_token);
-    }, error => console.error(error));
-  }
-
-  SSPR_3_Token(credential_token: string) {
+    console.log("SSPR_2_Challenge started");
 
     const formData = new FormData();
     formData.append('client_id', environment.appID);
-    formData.append('grant_type', 'password');
-    formData.append('password', this.signInPassword.nativeElement.value);
-    formData.append('credential_token', credential_token);
-    formData.append('scope', environment.scopes);
+    formData.append('challenge_type', 'oob redirect');
+    formData.append('password_reset_token', credential_token);
 
-    this.http.post<any>(environment.baseUrl + '/oauth2/v2.0/token', formData).subscribe(result => {
-      console.log("Result from SSPR_3_Token:");
+    this.http.post<any>(environment.baseUrl + '/resetpassword/v1.0/challenge', formData).subscribe(result => {
+
+      this.step = 2;
+      // Pass the sign-up token to the next step
+      this.showSpinner = false;
+      this.password_reset_token = result.password_reset_token;
+
       console.log(result);
 
-      // Can be replaced with sessionStorage
-      if (!result.error) {
-        // Can be replaced with sessionStorage
-        localStorage.setItem("accessToken", result.access_token);
-        this.RetrieveDisplayName();
-      }
-      else {
-        if (result.error_description.includes("AADSTS50126") || result.error_description.includes("AADSTS9002313")) {
-          this.errorMessage = "We couldn't find an account with this email address or password.";
-        }
-        else {
-          this.errorMessage = result.error_description;
-        }
+    }, errorResponse => {
 
-      }
+      console.log(errorResponse);
 
-    }, error => console.error(error));
-  }
-
-  RetrieveDisplayName() {
-
-    var headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      // Error handling
+      this.errorMessage = this.GetErrorMessage(errorResponse.error)
     });
+  }
 
-    const requestOptions = { headers: headers };
+
+  SSP3_3_VerifyOOB() {
+    console.log("SSP3_3_VerifyOOB started");
+    this.showSpinner = true;
 
     const formData = new FormData();
-    formData.append('accessToken', `${localStorage.getItem('accessToken')}`);
+    formData.append('client_id', environment.appID);
+    formData.append('grant_type', 'oob');
+    formData.append('password_reset_token', this.password_reset_token);
+    formData.append('oob', this.attOTP.nativeElement.value);
 
-    this.http.post<any>(environment.appUrl + "profile", formData /*, { headers: headers }**/).subscribe(result => {
-      console.log("Result from RetrieveDisplayName:");
+    this.http.post<any>(environment.baseUrl + '/resetpassword/v1.0/continue', formData).subscribe(result => {
+
       console.log(result);
 
-      // Update the parent component
-      this.displayNameEvent.emit(result.name);
-      this.OverlayVisibilityEvent.emit(false);
-      this.LoginButtonVisibilityEvent.emit(false);
+      this.step = 3;
+      this.showSpinner = false;
+      this.password_reset_token = result.password_submit_token;
 
-    }, error => console.error(error));
+    }, errorResponse => {
+
+      console.log(errorResponse);
+
+      // Error handling
+      this.errorMessage = this.GetErrorMessage(errorResponse.error);
+
+    });
   }
+
+
+  SSPR_4_Submit() {
+
+    console.log("SSPR_4_Submit started");
+    this.showSpinner = true;
+    
+    console.log
+    const formData = new FormData();
+    formData.append('client_id', environment.appID);
+    formData.append('password_submit_token', this.password_reset_token);
+    formData.append('new_password', this.attPassword.nativeElement.value);
+
+    this.http.post<any>(environment.baseUrl + '/resetpassword/v1.0/submit', formData).subscribe(result => {
+
+      console.log(result);
+
+      this.step = 3;
+      this.showSpinner = false;
+      this.password_reset_token = result.password_submit_token;
+
+      //this.interval = setInterval(this.SSPR_pollCompletion, 1000);
+      this.step = 4;
+
+    }, errorResponse => {
+
+      console.log(errorResponse);
+
+      // Error handling
+      this.errorMessage = this.GetErrorMessage(errorResponse.error);
+
+    });
+  }
+
+
+  SSPR_pollCompletion() {
+    console.log("SSPR_pollCompletion started");
+
+    console.log
+    const formData = new FormData();
+    formData.append('client_id', environment.appID);
+    formData.append('password_reset_token', this.password_reset_token);
+
+    this.http.post<any>(environment.baseUrl + '/resetpassword/v1.0/poll_completion', formData).subscribe(result => {
+
+      console.log(result);
+
+      clearInterval(this.interval);
+
+    }, errorResponse => {
+
+      console.log(errorResponse);
+
+      // Error handling
+      this.errorMessage = this.GetErrorMessage(errorResponse.error);
+
+    });
+  }
+
 
   closeOverlay() {
     this.OverlayVisibilityEvent.emit(false);
     this.LoginButtonVisibilityEvent.emit(true);
+  }
+
+  GetErrorMessage(error: any) {
+
+    this.showSpinner = false;
+
+    if (error.error_description) {
+      let i = error.error_description.indexOf("Trace");
+
+      if (i > 0) {
+        return error.error_description.substring(0, i - 1)
+      }
+    }
+
+    return error.message;
   }
 }

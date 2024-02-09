@@ -1,9 +1,51 @@
-<form style="padding-left: 5px; padding-right: 5px;">
-    <div class="mb-3">
-        <label for="signInEmail" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="signInEmail" #signInEmail value="">
-        <a href="#"  class="wg-identity-link" (click)="GoToSignIn();"> Remember your password?</a>
+<div style="width: 350px;">
+
+
+    <form style="padding-left: 5px; padding-right: 5px;" *ngIf="step == 1">
+        <div class="mb-3">
+            <label for="attEmail" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="attEmail" #attEmail value="">
+            <a href="#" class="wg-identity-link" (click)="GoToSignIn();"> Remember your password?</a>
+        </div>
+        <span style="color: red; display: block; padding-bottom: 10px;">{{errorMessage}}</span>
+        <button type="submit" class="btn btn-primary" (click)="SSPR_1_Start();">Next</button>
+        <div class="login-status" *ngIf="showSpinner">
+            <mat-spinner [diameter]="25" style="display: inline-block;"></mat-spinner>
+        </div>
+    </form>
+
+    <form style="padding-left: 5px; padding-right: 5px;" *ngIf="step == 2">
+        <div class="mb-3">
+            <label for="attOTP" class="form-label">Enter code</label>
+            <input type="email" class="form-control" id="attOTP" #attOTP value="">
+        </div>
+        <span style="color: red; display: block; padding-bottom: 10px;">{{errorMessage}}</span>
+        <button type="submit" class="btn btn-primary" (click)="SSP3_3_VerifyOOB();">Validate and create</button>
+
+        <div class="login-status" *ngIf="showSpinner">
+            <mat-spinner [diameter]="25" style="display: inline-block;"></mat-spinner>
+        </div>
+    </form>
+
+
+    <form style="padding-left: 5px; padding-right: 5px;" *ngIf="step == 3">
+        <div class="mb-3">
+            <label for="attPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="attPassword" #attPassword value="">
+        </div>
+        <div class="mb-3">
+            <label for="attReEnterPassword" class="form-label">Re-enter password</label>
+            <input type="password" class="form-control" id="attReEnterPassword" #attReEnterPassword value="">
+        </div>
+
+        <button type="submit" class="btn btn-primary" (click)="SSPR_4_Submit();">Continue</button>
+
+        <div class="login-status" *ngIf="showSpinner">
+            <mat-spinner [diameter]="25" style="display: inline-block;"></mat-spinner>
+        </div>
+    </form>
+
+    <div *ngIf="step == 4">
+        Your password successfully updated. Please sign-in.
     </div>
-    <span style="color: red; display: block; padding-bottom: 10px;">{{errorMessage}}</span>
-    <button type="submit" class="btn btn-primary" (click)="SSPR_1_Initiate();">Next</button>
-</form>
+</div>

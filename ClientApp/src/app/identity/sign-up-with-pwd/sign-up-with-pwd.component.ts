@@ -180,7 +180,14 @@ export class SignUpWithPwdComponent {
 
       this.loginStarts = false;
 
-    }, error => console.error(error));
+    }, errorResponse => {
+
+      console.log(errorResponse);
+
+      // Error handling
+      this.loginStarts = false;
+      this.errorMessage = this.GetErrorMessage(errorResponse.error)
+    });
   }
 
   closeOverlay() {
