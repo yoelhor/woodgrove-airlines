@@ -24,12 +24,15 @@ export class SignUpWithPwdComponent {
   @ViewChild('attDisplayName') attDisplayName!: ElementRef;
   @ViewChild('attPassword') attPassword!: ElementRef;
   @ViewChild('attOTP') attOTP!: ElementRef;
+  @ViewChild('attPolicy') attPolicy!: ElementRef;
 
   step = 1;
   errorMessage = "";
   loginStarts = false;
   signup_token = "";
   username = "";
+  validationError = "";
+  public isPolcyChecked = false;
 
 
   GoToSignIn() {
@@ -39,6 +42,12 @@ export class SignUpWithPwdComponent {
   SignUpStart() {
 
     console.log("SignUpStart started");
+    console.log(this.isPolcyChecked)
+    if (this.isPolcyChecked == false)
+    {
+      this.errorMessage = "You must read and agree the Woodgorve policy."
+      return;
+    }
 
     this.errorMessage = "";
     this.loginStarts = true;
