@@ -28,7 +28,7 @@ export class SignUpWithPwdComponent {
 
   step = 1;
   errorMessage = "";
-  loginStarts = false;
+  showSpinner = false;
   signup_token = "";
   username = "";
   validationError = "";
@@ -50,7 +50,7 @@ export class SignUpWithPwdComponent {
     }
 
     this.errorMessage = "";
-    this.loginStarts = true;
+    this.showSpinner = true;
 
     const formData = new FormData();
     formData.append('client_id', environment.appID);
@@ -74,7 +74,7 @@ export class SignUpWithPwdComponent {
       }
       else {
         // Error handling
-        this.loginStarts = false;
+        this.showSpinner = false;
         this.errorMessage = this.GetErrorMessage(errorResponse.error);
       }
 
@@ -95,12 +95,12 @@ export class SignUpWithPwdComponent {
 
       if (result.error) {
         // Error handling
-        this.loginStarts = false;
+        this.showSpinner = false;
         this.errorMessage = result.error_description;
       }
       else {
         this.step = 2;
-        this.loginStarts = false;
+        this.showSpinner = false;
         // Pass the sign-up token to the next step
         this.signup_token = result.signup_token;
         this.username = this.attEmail.nativeElement.value
@@ -112,6 +112,8 @@ export class SignUpWithPwdComponent {
   SignUpVerifyOOB() {
     console.log("SignUpVerifyOOB started");
 
+    this.showSpinner = true;
+    
     const formData = new FormData();
     formData.append('client_id', environment.appID);
     formData.append('grant_type', 'oob');
@@ -129,7 +131,7 @@ export class SignUpWithPwdComponent {
       console.log(errorResponse);
 
       // Error handling
-      this.loginStarts = false;
+      this.showSpinner = false;
       this.errorMessage = this.GetErrorMessage(errorResponse.error);
 
     });
@@ -158,7 +160,7 @@ export class SignUpWithPwdComponent {
       console.log(errorResponse);
 
       // Error handling
-      this.loginStarts = false;
+      this.showSpinner = false;
       this.errorMessage = this.GetErrorMessage(errorResponse.error)
     }
     );
@@ -187,14 +189,14 @@ export class SignUpWithPwdComponent {
       this.OverlayVisibilityEvent.emit(false);
       this.LoginButtonVisibilityEvent.emit(false);
 
-      this.loginStarts = false;
+      this.showSpinner = false;
 
     }, errorResponse => {
 
       console.log(errorResponse);
 
       // Error handling
-      this.loginStarts = false;
+      this.showSpinner = false;
       this.errorMessage = this.GetErrorMessage(errorResponse.error)
     });
   }

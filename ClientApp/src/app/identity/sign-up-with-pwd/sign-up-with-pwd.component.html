@@ -30,7 +30,7 @@
     <button type="submit" class="btn btn-primary" (click)="SignUpStart();">Next</button> 
 
     
-    <div class="login-status" *ngIf="loginStarts">
+    <div class="login-status" *ngIf="showSpinner">
         <mat-spinner [diameter]="25" style="display: inline-block;"></mat-spinner>
     </div>
 </form>
@@ -43,7 +43,7 @@
     <span style="color: red; display: block; padding-bottom: 10px;">{{errorMessage}}</span>
     <button type="submit" class="btn btn-primary" (click)="SignUpVerifyOOB();">Validate and create</button> 
 
-    <div class="login-status" *ngIf="loginStarts">
+    <div class="login-status" *ngIf="showSpinner">
         <mat-spinner [diameter]="25" style="display: inline-block;"></mat-spinner>
     </div>
 </form>
