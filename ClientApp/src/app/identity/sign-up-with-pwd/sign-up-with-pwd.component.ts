@@ -118,7 +118,9 @@ export class SignUpWithPwdComponent {
 
       console.log(result);
 
-      this.SignUp_4_Token(result.continuation_token);
+      // Temporary solution 
+      //this.SignUp_4_Token(result.continuation_token);
+      this.GoToSignIn();
 
     }, errorResponse => {
 
@@ -160,6 +162,7 @@ export class SignUpWithPwdComponent {
     );
   }
 
+  
   RetrieveDisplayName() {
 
     console.log("RetrieveDisplayName started");
