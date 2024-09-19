@@ -27,7 +27,7 @@
         
     </div>
     
-    <button type="submit" class="btn btn-primary" (click)="SignUpStart();">Next</button> 
+    <button type="submit" class="btn btn-primary" (click)="SignUp_1_Start();">Next</button> 
 
     
     <div class="login-status" *ngIf="showSpinner">
@@ -41,7 +41,7 @@
         <input type="email" class="form-control" id="attOTP" #attOTP value="">
     </div>
     <span style="color: red; display: block; padding-bottom: 10px;">{{errorMessage}}</span>
-    <button type="submit" class="btn btn-primary" (click)="SignUpVerifyOOB();">Validate and create</button> 
+    <button type="submit" class="btn btn-primary" (click)="SignUp_3_VerifyOOB();">Validate and create</button> 
 
     <div class="login-status" *ngIf="showSpinner">
         <mat-spinner [diameter]="25" style="display: inline-block;"></mat-spinner>

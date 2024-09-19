@@ -29,7 +29,7 @@ export class SignUpWithPwdComponent {
   step = 1;
   errorMessage = "";
   showSpinner = false;
-  signup_token = "";
+  continuation_token = "";
   username = "";
   validationError = "";
   public isPolcyChecked = false;
@@ -39,12 +39,11 @@ export class SignUpWithPwdComponent {
     this.UserFlowEvent.emit("signin");
   }
 
-  SignUpStart() {
+  SignUp_1_Start() {
 
-    console.log("SignUpStart started");
+    console.log("SignUp_1_Start started");
     console.log(this.isPolcyChecked)
-    if (this.isPolcyChecked == false)
-    {
+    if (this.isPolcyChecked == false) {
       this.errorMessage = "You must read and agree the Woodgorve policy."
       return;
     }
@@ -64,30 +63,25 @@ export class SignUpWithPwdComponent {
 
       console.log(result);
 
+      // Call the challenge endpoint 
+      this.SignUp_2_Challenge(result.continuation_token);
+
     }, errorResponse => {
 
       console.log(errorResponse);
-
-      if (errorResponse.error.error === "verification_required") {
-        // Call the challenge endpoint 
-        this.SignUpChallenge(errorResponse.error.signup_token);
-      }
-      else {
-        // Error handling
-        this.showSpinner = false;
-        this.errorMessage = this.GetErrorMessage(errorResponse.error);
-      }
-
+      // Error handling
+      this.showSpinner = false;
+      this.errorMessage = this.GetErrorMessage(errorResponse.error);
     });
   }
 
-  SignUpChallenge(signup_token: string) {
+  SignUp_2_Challenge(continuation_token: string) {
 
-    console.log("SignUpChallenge started");
+    console.log("SignUp_2_Challenge started");
 
     const formData = new FormData();
     formData.append('client_id', environment.appID);
-    formData.append('signup_token', signup_token);
+    formData.append('continuation_token', continuation_token);
 
     this.http.post<any>(environment.baseUrl + '/signup/v1.0/challenge', formData).subscribe(result => {
 
@@ -102,29 +96,29 @@ export class SignUpWithPwdComponent {
         this.step = 2;
         this.showSpinner = false;
         // Pass the sign-up token to the next step
-        this.signup_token = result.signup_token;
+        this.continuation_token = result.continuation_token;
         this.username = this.attEmail.nativeElement.value
       }
     }, error => console.error(error));
   }
 
 
-  SignUpVerifyOOB() {
-    console.log("SignUpVerifyOOB started");
+  SignUp_3_VerifyOOB() {
+    console.log("SignUp_3_VerifyOOB started");
 
     this.showSpinner = true;
-    
+
     const formData = new FormData();
     formData.append('client_id', environment.appID);
     formData.append('grant_type', 'oob');
-    formData.append('signup_token', this.signup_token);
+    formData.append('continuation_token', this.continuation_token);
     formData.append('oob', this.attOTP.nativeElement.value);
 
     this.http.post<any>(environment.baseUrl + '/signup/v1.0/continue', formData).subscribe(result => {
 
       console.log(result);
 
-      this.SignUpToken(result.signin_slt);
+      this.SignUp_4_Token(result.continuation_token);
 
     }, errorResponse => {
 
@@ -137,14 +131,14 @@ export class SignUpWithPwdComponent {
     });
   }
 
-  SignUpToken(signin_slt: string) {
+  SignUp_4_Token(continuation_token: string) {
 
-    console.log("SignUpToken started");
+    console.log("SignUp_4_Token started");
 
     const formData = new FormData();
     formData.append('client_id', environment.appID);
-    formData.append('grant_type', 'slt');
-    formData.append('signin_slt', signin_slt);
+    formData.append('grant_type', 'continuation_token');
+    formData.append('continuation_token', continuation_token);
     formData.append('username', this.username);
     formData.append('scope', environment.scopes);
 

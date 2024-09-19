@@ -67,7 +67,7 @@ export class SignInWithPwdComponent {
       }
       else {
         // Call the challenge endpoint 
-        this.PasswordLogin_2_Challenge(result.credential_token);
+        this.PasswordLogin_2_Challenge(result.continuation_token);
 
       }
 
@@ -76,7 +76,8 @@ export class SignInWithPwdComponent {
       console.log(response.error);
 
       // Error handling
-      if (response.error.error_description.includes("AADSTS50034")) {
+      if (response.error.error_description != undefined &&
+          response.error.error_description.includes("AADSTS50034")) {
         this.errorMessage = "We couldn't find an account with this email address.";
         this.showSignUpLink = true;
       }
@@ -91,14 +92,14 @@ export class SignInWithPwdComponent {
   }
 
 
-  PasswordLogin_2_Challenge(credential_token: string) {
+  PasswordLogin_2_Challenge(continuation_token: string) {
 
     console.log("PasswordLogin_2_Challenge started");
 
     const formData = new FormData();
     formData.append('client_id', environment.appID);
     formData.append('challenge_type', 'password redirect');
-    formData.append('credential_token', credential_token);
+    formData.append('continuation_token', continuation_token);
 
     this.http.post<any>(environment.baseUrl + '/oauth2/v2.0/challenge', formData).subscribe(result => {
 
@@ -110,7 +111,7 @@ export class SignInWithPwdComponent {
         this.errorMessage = result.error_description;
       }
       else {
-        this.PasswordLogin_3_Token(result.credential_token);
+        this.PasswordLogin_3_Token(result.continuation_token);
       }
     }, error => {
       console.error(error);
@@ -119,7 +120,7 @@ export class SignInWithPwdComponent {
     });
   }
 
-  PasswordLogin_3_Token(credential_token: string) {
+  PasswordLogin_3_Token(continuation_token: string) {
 
     console.log("PasswordLogin_3_Token started");
 
@@ -127,7 +128,7 @@ export class SignInWithPwdComponent {
     formData.append('client_id', environment.appID);
     formData.append('grant_type', 'password');
     formData.append('password', this.signInPassword.nativeElement.value);
-    formData.append('credential_token', credential_token);
+    formData.append('continuation_token', continuation_token);
     formData.append('scope', environment.scopes);
 
     this.http.post<any>(environment.baseUrl + '/oauth2/v2.0/token', formData).subscribe(result => {
